@@ -1,0 +1,27 @@
+<table style="width: 550px; margin: 0 auto; background-color: white; border-radius: 5px; padding: 25px;">
+  <tbody>
+    <tr>
+      <td>
+        <p>Heyyy! <%= @user.name %>!</p>
+        <p style="margin-top: 0; margin-bottom: 5px;">Acá tenes un GRAN GRACIAS por venir a <strong><%= @event.name %></strong>!</p>
+        <p style="margin-top: 0; margin-bottom: 5px;">Por favor, rellená un breve formulario de comentarios para que podamos seguir mejorando.</p>
+        <div style="text-align: center;">
+          <h1>
+            <a href="<%=  fill_form_response_url(kommunity: @event_entry_pass.event.kommunity,data_form_entity_id: @form.id).html_safe %>">
+              Formulario de feedback
+            </a>
+          </h1>
+          <p style="margin-top: 0; margin-bottom: 5px;">Quedate atento a <a href="https://unae.edu.py/tv/">UNAE</a> ¡Para más eventos innovadores y emocionantes!</p>
+          <p style="margin-top: 10px; margin-bottom: 10px; font-weight: bold; color: #4285F4;">Hemos adjuntado su certificado de participación a este correo electrónico. ¡Gracias por ser parte!</p>
+          <hr>
+          <% if !@message.blank? %>
+            <h3 style="text-align: center;">Los organizadores han incluido un mensaje</h3>
+            <blockquote style="border: 1px dashed lightgrey; border-radius: 5px; padding: 5px;">
+              <%= @message.html_safe %>
+            </blockquote>
+          <% end %>
+        </div>
+      </td>
+    </tr>
+  </tbody>
+</table>

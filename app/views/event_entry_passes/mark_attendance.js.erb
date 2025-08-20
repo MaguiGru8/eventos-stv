@@ -1,0 +1,10 @@
+{
+$('#mark-attendance-form').trigger("reset");
+$('#mark-attendance-form input[type=number]').trigger('click');
+let notification = new Noty({
+text: '<% if !@already_marked %>Bienvenido al evento <strong><%= @entry_pass.user.name %></strong>! ¡Que tengas un gran día! <% else %> ¡Ya marcaste tu visita! <% end %>',
+theme: 'relax',
+type: '<% if !@already_marked %>success<% else %>error<% end %>',
+timeout: 2500
+}).show();
+}

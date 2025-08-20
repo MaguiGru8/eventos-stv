@@ -1,0 +1,72 @@
+#data-form-entities-form-responses{
+
+  .table-responsive{
+    height: 100vh;
+    overflow: scroll;
+    font-size: 14px;
+
+    table{
+
+      th.sticky-row{
+        white-space: nowrap;
+      }
+
+      .sticky-row{
+        position: sticky;
+        top: 0;
+        background: white;
+        z-index: 1;
+      }
+
+      .sticky-box{
+        position: sticky;
+        left: 0;
+        background-color: white;
+        z-index: 2;
+      }
+
+
+      .sticky-row.sticky-box{
+        z-index: 100;
+      }
+
+      .registration-status-actions-list{
+        li{
+          padding: 5px;
+          font-size: 12px;
+        }
+      }
+
+      .registration-status-counter{
+        font-size: 12px;
+
+        li{
+
+          &.active{
+            a{
+              color: white !important;
+
+            }
+          }
+          a{
+            color: grey;
+          }
+        }
+
+
+
+      }
+
+
+      .user-avatar{
+        width: 55px;
+        img{
+          width: 100%;
+        }
+      }
+
+
+    }
+
+  }
+}

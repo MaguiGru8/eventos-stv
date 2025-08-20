@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Certificate of Participation</title>
+    <style>
+      body {
+        font-family: 'Italianno', cursive;
+        text-align: center;
+        padding: 50px;
+        border: 20px solid #4285F4;
+        margin: 0;
+        height: 100%;
+        box-sizing: border-box;
+      }
+      .certificate {
+        width: 100%;
+        height: 100%;
+        padding: 211px;
+        box-sizing: border-box;
+      }
+      .logo {
+        margin-bottom: 20px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+      }
+      .logo img {
+        max-width: 200px;
+        max-height: 100px;
+        object-fit: contain;
+        display: block;
+        margin: 0 auto;
+      }
+      h1 {
+        font-size: 36px;
+        color: #4285F4;
+        margin-bottom: 20px;
+      }
+      h2 {
+        font-size: 28px;
+        margin-bottom: 30px;
+      }
+      .recipient {
+        font-family: 'Italianno', cursive;
+        font-style: normal;
+        font-weight: 400;
+        font-size: 32px;
+        font-weight: bold;
+        color: #0F9D58;
+        margin: 20px 0;
+      }
+      .event-name {
+        font-size: 24px;
+        margin: 20px 0;
+        font-weight: bold;
+      }
+      .date {
+        margin: 20px 0;
+        font-size: 18px;
+      }
+      .signature {
+        font-size: 18px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="certificate">
+      <div class="logo">
+        <% if @event.kommunity.logo_image.attached? %>
+          <img src="data:image/<%= @event.kommunity.logo_image.blob.content_type %>;base64,<%= Base64.strict_encode64(@event.kommunity.logo_image.download) %>" alt="<%= @event.kommunity.name %> Logo">
+        <% end %>
+      </div>
+      <h1>Certificado de participación</h1>
+      <p>Por la presente se certifica que</p>
+      <div class="recipient"><%= @user.name %></div>
+      <p>Ha participado en</p>
+      <div class="event-name"><%= @event.name %></div>
+      <div class="date">on <%= @event.event_start_time.strftime('%B %d, %Y') rescue Time.now.strftime('%B %d, %Y') %></div>
+      <div class="signature">
+        Organizador<br>
+        <%= @event.kommunity.name %>
+      </div>
+    </div>
+  </body>
+</html>

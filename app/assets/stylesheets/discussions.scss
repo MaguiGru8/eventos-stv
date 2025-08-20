@@ -1,0 +1,36 @@
+.user-discussion-card{
+  width: 100%;
+
+  &:hover{
+    box-shadow: 1px 1px 1px 1px lightgrey;
+  }
+
+  .existing-profile-image{
+    width: 18px;
+
+    img{
+      width: 100%;
+    }
+  }
+
+
+  .discussion-description{
+    width: 100%;
+    overflow-y: scroll;
+    max-height: 100px;
+    background-color: #edf3ff;
+    padding: 10px;
+    font-size: 12px;
+  }
+
+
+  .discussion-messages-list{
+    margin-bottom: 5px;
+    max-height: 250px;
+    overflow-y: scroll;
+
+    li{
+      padding: 0;
+    }
+  }
+}

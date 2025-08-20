@@ -1,0 +1,34 @@
+<div id="event-data-form-entity-response-group-rsvp-email">
+  <h3><%= @edfeg.name %></h3>
+  <h4>Evento: <%= @event.name %></h4>
+  <% if @force %>
+    <p>Se enviarán pases de entrada a todos los registros preseleccionados.</p>
+  <% else %>
+    <p>Los pases de entrada se enviarán a los registros restantes preseleccionados.</p>
+  <% end %>
+  <div class="email-format-container">
+    <%= form_with url: send_event_data_form_entity_group_entry_pass_email_event_communication_mailers_path(event_data_form_entity_group: @edfeg), method: :post, remote: true do |f| %>
+      <h5>Asunto y cualquier mensaje específico para insertar</h5>
+      <fieldset>
+        <div class="alert alert-info" role="alert">
+          ¡Agregaremos automáticamente los detalles del evento y el código de entrada al correo electrónico!
+        </div>
+        <div class="field email-subject form-group">
+          <%= f.label :subject %>
+          <%= f.text_field :subject, value: "#{@event.kommunity.name} :: #{@event.name} :: clave de acceso", required: true, class: 'form-control' %>
+          <%= f.hidden_field :force, value: @force %>
+        </div>
+        <div class="field form-group">
+          <%= render 'event_details_options', f: f %>
+        </div>
+        <div class="field form-group">
+          <%= f.label :message, "Añadir algún mensaje (opcional)" %>
+          <%= f.text_area :message, :class => "tinymce editor", :rows => 3, :cols => 50 %>
+        </div>
+        <div class="form-group d-flex justify-content-center">
+          <%= f.submit "Enviar", class: "btn-outline-primary" %>
+        </div>
+      </fieldset>
+    <% end %>
+  </div>
+</div>

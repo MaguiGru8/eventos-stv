@@ -1,0 +1,13 @@
+{
+let form = $("<%= escape_javascript render 'event_data_form_entity_group_rsvp_email_form' %>");
+let modal = $('<%= escape_javascript render 'email_modal' %>');
+$(' .modal-title', modal).html("Enviar correos de confirmación");
+$(' .modal-body', modal).empty().append(form);
+$('#modal-mail-form').remove();
+$(modal).attr('id', 'modal-mail-form');
+$('body').append(modal);
+tinyMCE.init({
+selector: '.tinymce.editor'
+});
+modal.modal('show');
+}

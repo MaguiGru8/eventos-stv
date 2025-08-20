@@ -1,0 +1,79 @@
+<% content_for :page_title do %>
+  <%= t('home.page_title') %>
+<% end %>
+<% unless user_signed_in? %>
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      $('#force-sign-in-modal').modal('show');
+    });
+  </script>
+<% else %>
+  <script>
+    var previousUrl = localStorage.getItem('previous_url');
+    if (previousUrl) {
+      localStorage.removeItem('previous_url');
+      window.location.href = previousUrl;
+    }
+  </script>
+<% end %>
+<section id="home-home" class="py-5">
+  <div class="typing-container">
+    <h1 class="typing-text">
+      <span class="text-regular">Descubrí</span>
+      <span class="text-black">eventos IN CREI BLES</span>
+    </h1>
+  </div>
+  <div class="row justify-content-center">
+    <div class="col-md-9 horizontal-cards mb-5">
+      <div class="d-flex align-items-center mb-4">
+        <i class="fas fa-calendar-alt text-primary me-3 fa-2x mr-2"></i>
+        <h3 class="text-primary mb-0"><%= t('home.upcoming_events') %></h3>
+      </div>
+      <% if !@upcoming_events.empty? %>
+        <div class="row d-flex flex-md-row flex-sm-column flex-nowrap">
+          <% @upcoming_events.each do |event| %>
+            <div class="col-md-4 m-2 p-0">
+              <%= render 'events/event_mini_card', event: event %>
+            </div>
+          <% end %>
+        </div>
+      <% else %>
+        <%= t('home.no_events_found') %>
+      <% end %>
+    </div>
+    <div class="col-md-9 horizontal-cards mb-5">
+      <div class="d-flex align-items-center mb-4">
+        <i class="fas fa-users text-success me-3 fa-2x mr-2"></i>
+        <h3 class="text-success mb-0"><%= t('home.editions') %></h3>
+      </div>
+      <% if !@kommunities.empty? %>
+        <div class="row d-flex flex-md-row flex-sm-column flex-nowrap ">
+          <% @kommunities.each do |kommunity| %>
+            <div class="col-md-4 m-2 p-0">
+              <%= render 'kommunities/display_card', kommunity: kommunity %>
+            </div>
+          <% end %>
+        </div>
+      <% else %>
+        <%= t('home.no_events_found') %>
+      <% end %>
+    </div>
+    <div class="col-md-9 horizontal-cards">
+      <div class="d-flex align-items-center mb-4">
+        <i class="fas fa-history text-secondary me-3 fa-2x mr-2"></i>
+        <h3 class="text-secondary"><%= t('home.past_events') %></h3>
+      </div>
+      <% if !@recent_past_events.empty? %>
+        <div class="row d-flex flex-md-row flex-sm-column flex-nowrap">
+          <% @recent_past_events.each do |event| %>
+            <div class="m-2 p-0">
+              <%= render 'events/event_mini_card', event: event %>
+            </div>
+          <% end %>
+        </div>
+      <% else %>
+        <%= t('home.no_events_found') %>
+      <% end %>
+    </div>
+  </div>
+</section>

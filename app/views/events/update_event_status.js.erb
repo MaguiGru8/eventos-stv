@@ -1,0 +1,9 @@
+{
+$('#event-status-select').replaceWith($("<%= escape_javascript render 'event_status_select', event: @event, event_statuses: @event_statuses %>"));
+let notification = new Noty({
+text: 'Estado del evento actualizado',
+theme: 'relax',
+type: 'success',
+timeout: 1500
+}).show();
+}

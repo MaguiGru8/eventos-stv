@@ -1,0 +1,196 @@
+es:
+  hello: "Hola mundo"
+  
+  home:
+    page_title: "Página principal | Eventos"
+    upcoming_events: "Próximos eventos"
+    past_events: "Eventos pasados"
+    editions: "Cursos o grupos"
+    no_events_found: "No se han encontrado eventos"
+  
+  navigation:
+    create_seminar: "Crear un curso o grupo"
+    manage_users: "Administrar usuarios"
+    edit_profile: "Editar perfil"
+    sign_out: "Cerrar sesión"
+    sign_in_or_register: "Iniciar sesión o Registrarse"
+    google_sign_in: "Iniciar sesión con Google"
+
+  modals:
+    thank_you: "¡Gracias!"
+    response_saved: "¡Hemos guardado tu respuesta!"
+    welcome_sign_in: "¡Bienvenido! Por favor inicia sesión"
+
+  forms:
+    community: "Curso o grupo"
+    questions: "Preguntas"
+    add_question: "Agregar pregunta"
+    submit: "Enviar"
+    save: "Guardar"
+    name: "Nombre"
+    description: "Descripción"
+    email: "Correo electrónico"
+    password: "Contraseña"
+    password_confirmation: "Confirmar contraseña"
+    remember_me: "Recordarme"
+    current_password: "Contraseña actual"
+    
+  events:
+    edit_details: "Editar detalles del evento"
+    organized_by: "Organizado por"
+    select_year_course: "Selecciona el año y curso"
+    event_name: "Nombre del evento"
+    event_details: "Detalles del evento"
+    start_date_time: "Fecha y hora de inicio"
+    end_date_time: "Fecha y hora de culminación"
+    create_forms: "Crear formularios"
+    forms_description: "Algo como un formulario de registro, formulario de retroalimentación, etc."
+    form_type: "Tipo de formulario"
+    create_form: "Crear formulario"
+    all_confirmations: "Todas las confirmaciones"
+    add_location: "Agregar ubicación para %{name}"
+    add_location_button: "Agregar ubicación"
+    add_track_for_location: "Agregar sala para %{name} en una ubicación"
+    status:
+      draft: "Borrador"
+      open: "Abierto"
+      closed: "Cerrado"
+      completed: "Completado"
+      canceled: "Cancelado"
+      
+    details: "Detalles"
+    locations:
+      name: "Nombre"
+      address: "Dirección"
+      map_link: "Enlace del mapa"
+      
+    tracks:
+      name: "Nombre"
+      description: "Descripción"
+      track_type: "Tipo de pista"
+    
+  activerecord:
+    models:
+      user: "Usuario"
+      event: "Evento"
+      kommunity: "Comunidad"
+      data_form: "Formulario"
+      
+    attributes:
+      user:
+        name: "Nombre"
+        email: "Correo electrónico"
+        password: "Contraseña"
+        password_confirmation: "Confirmar contraseña"
+        current_password: "Contraseña actual"
+      event:
+        name: "Nombre"
+        description: "Descripción"
+        start_time: "Hora de inicio"
+        end_time: "Hora de fin"
+        kommunity: "Comunidad"
+      kommunity:
+        name: "Nombre"
+        description: "Descripción"
+      data_form:
+        name: "Nombre"
+        
+  errors:
+    messages:
+      not_saved: "No se pudo guardar %{resource}"
+      blank: "no puede estar en blanco"
+      taken: "ya está en uso"
+      too_short: "es demasiado corto (mínimo %{count} caracteres)"
+      too_long: "es demasiado largo (máximo %{count} caracteres)"
+      confirmation: "no coincide"
+      invalid: "no es válido"
+      
+  date:
+    formats:
+      default: "%d/%m/%Y"
+      short: "%d de %b"
+      long: "%d de %B de %Y"
+    day_names: [Domingo, Lunes, Martes, Miércoles, Jueves, Viernes, Sábado]
+    abbr_day_names: [Dom, Lun, Mar, Mié, Jue, Vie, Sáb]
+    month_names: [~, Enero, Febrero, Marzo, Abril, Mayo, Junio, Julio, Agosto, Septiembre, Octubre, Noviembre, Diciembre]
+    abbr_month_names: [~, Ene, Feb, Mar, Abr, May, Jun, Jul, Ago, Sep, Oct, Nov, Dic]
+    order:
+      - :day
+      - :month
+      - :year
+
+  time:
+    formats:
+      default: "%A, %d de %B de %Y %H:%M:%S %z"
+      short: "%d de %b %H:%M"
+      long: "%d de %B de %Y %H:%M"
+    am: "am"
+    pm: "pm"
+  
+  # Traducciones generales
+  actions:
+    edit: "Editar"
+    show: "Ver"
+    destroy: "Eliminar"
+    back: "Volver"
+    confirm: "¿Estás seguro?"
+    submit: "Enviar"
+    cancel: "Cancelar"
+    save: "Guardar"
+    create: "Crear"
+    update: "Actualizar"
+    
+  # Mensajes flash
+  flash:
+    success:
+      create: "%{resource} creado exitosamente."
+      update: "%{resource} actualizado exitosamente."
+      destroy: "%{resource} eliminado exitosamente."
+    error:
+      create: "Error al crear %{resource}."
+      update: "Error al actualizar %{resource}."
+      destroy: "Error al eliminar %{resource}."
+
+  # Mensajes de error
+  errors:
+    messages:
+      not_found: "no encontrado"
+      already_confirmed: "ya fue confirmado"
+      not_saved: "no pudo guardarse"
+
+  # Atributos comunes
+  attributes:
+    created_at: "Creado el"
+    updated_at: "Actualizado el"
+    name: "Nombre"
+    description: "Descripción"
+    email: "Correo electrónico"
+    password: "Contraseña"
+    remember_me: "Recordarme"
+
+  # Fechas y tiempo
+  date:
+    formats:
+      default: "%d/%m/%Y"
+      short: "%d %b"
+      long: "%d de %B de %Y"
+    day_names: [Domingo, Lunes, Martes, Miércoles, Jueves, Viernes, Sábado]
+    abbr_day_names: [Dom, Lun, Mar, Mié, Jue, Vie, Sáb]
+    month_names: [~, Enero, Febrero, Marzo, Abril, Mayo, Junio, Julio, Agosto, Septiembre, Octubre, Noviembre, Diciembre]
+    abbr_month_names: [~, Ene, Feb, Mar, Abr, May, Jun, Jul, Ago, Sep, Oct, Nov, Dic]
+    order:
+      - :day
+      - :month
+      - :year
+
+  time:
+    formats:
+      default: "%A, %d de %B de %Y %H:%M:%S %z"
+      short: "%d de %b %H:%M"
+      long: "%d de %B de %Y %H:%M"
+    am: "am"
+    pm: "pm"
+
+  
+  mailers:
+    send_emails_to: "Enviar los emails a %{type}"

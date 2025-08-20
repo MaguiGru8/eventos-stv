@@ -1,0 +1,27 @@
+<div>
+  <%= form_for @data_form do |f| %>
+    <% if @data_form.errors.any? %>
+      <%= @data_form.errors.full_messages %>
+    <% end %>
+    <div class="form-group">
+      <%= f.label :name %>
+      <%= f.text_field :name, class: 'form-control' %>
+    </div>
+    <div class="form-group">
+      <%= f.label :kommunity, t('forms.community') %>
+      <%= f.select :kommunity_id, options_for_select(current_user.organizer_kommunities.collect{|m| [m.name, m.id]}, f.object.kommunity_id), {}, class: 'form-control' %>
+    </div>
+    <p><%= t('forms.questions') %></p>
+    <div>
+      <%= f.fields_for :questions do |builder| %>
+        <%= render "question_fields", f: builder %>
+      <% end %>
+    </div>
+    <p class="mt-2">
+      <%= link_to_add_fields t('forms.add_question'), f, :questions %>
+    </p>
+    <div>
+      <%= f.submit t('forms.submit'), class: 'btn btn-info' %>
+    </div>
+  <% end %>
+</div>

@@ -1,0 +1,102 @@
+<div class="row" id="event-create-edit-form">
+  <div class="card col-md-6 offset-md-3">
+    <div class="card-body">
+      <h5 class="card-title"><%= t('events.edit_details') %></h5>
+      <%= form_for @event, url: (@event.new_record? ?
+      events_path : event_path(params[:kommunity], @event.slug)) do |f| %>
+        <fieldset>
+          <div class="form-group">
+            <%= f.label :kommunity, t('events.organized_by'), class: "badge badge-secondary" %>
+            <%= f.select :kommunity_id, options_for_select(current_user.organizer_kommunities.collect{|m| [m.name, m.id]}, f.object.kommunity_id), {:include_blank => t('events.select_year_course')}, class: 'form-control' , required: true %>
+          </div>
+          <div class="form-group">
+            <%= f.label :name, t('events.event_name'), class: "badge badge-secondary" %>
+            <%= f.text_field :name, class: 'form-control', required: true %>
+          </div>
+          <div class="form-group">
+            <%= f.label :description, t('events.event_details'), class: "badge badge-secondary" %>
+            <%= f.text_area :description, class: 'form-control tinymce editor', rows: 10 %>
+            <script>
+              tinymce.init({
+                selector: 'textarea.tinymce',
+                language: 'es',  // Configurar el idioma español
+                height: 300,
+                plugins: [
+                  'advlist autolink lists link image charmap print preview anchor',
+                  'searchreplace visualblocks code fullscreen',
+                  'insertdatetime media table paste code help wordcount'
+                ],
+                toolbar: 'undo redo | formatselect | bold italic backcolor | \
+                  alignleft aligncenter alignright alignjustify | \
+                  bullist numlist outdent indent | removeformat | help',
+                menubar: true
+              });
+            </script>
+          </div>
+          <!--<div class="form-group">-->
+          <!--<%= f.label :seats, class: "badge badge-secondary" %>-->
+          <!--<%= f.number_field :seats, class: 'form-control' %>-->
+          <!--</div>-->
+          <div class="form-group">
+            <%= f.label :start_time, t('events.start_date_time'), class: "badge badge-secondary" %>
+            <div style="overflow:hidden;">
+              <div class="form-group">
+                <div class="row">
+                  <div class="col">
+                    <%= f.hidden_field :start_time %>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="form-group">
+            <%= f.label :end_time, t('events.end_date_time'), class: "badge badge-secondary" %>
+            <div style="overflow:hidden;">
+              <div class="form-group">
+                <div class="row">
+                  <div class="col">
+                    <%= f.hidden_field :end_time %>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <%= f.submit t('forms.save'), class: "btn btn-warning" %>
+          <!-- El resto del código permanece igual hasta la sección de script -->
+          <script type="text/javascript">
+            $(function () {
+              // Configurar el idioma español para moment.js
+              moment.locale('es', {
+                months: 'Enero_Febrero_Marzo_Abril_Mayo_Junio_Julio_Agosto_Septiembre_Octubre_Noviembre_Diciembre'.split('_'),
+                monthsShort: 'Ene_Feb_Mar_Abr_May_Jun_Jul_Ago_Sep_Oct_Nov_Dic'.split('_'),
+                weekdays: 'Domingo_Lunes_Martes_Miércoles_Jueves_Viernes_Sábado'.split('_'),
+                weekdaysShort: 'Dom_Lun_Mar_Mié_Jue_Vie_Sáb'.split('_'),
+                weekdaysMin: 'Do_Lu_Ma_Mi_Ju_Vi_Sá'.split('_')
+              });
+            
+              $('#event_end_time').datetimepicker({
+                inline: true,
+                sideBySide: true,
+                format: 'DD-MM-YYYY hh:mm A Z',
+                locale: 'es', // Establecer el idioma español
+                defaultDate: moment("<%= @event.end_time.blank? ? Time.now.strftime('%d-%m-%Y %I:%M %p') : @event.end_time.strftime('%d-%m-%Y %I:%M %p') %>", "DD-MM-YYYY hh:mm A Z")
+              });
+            
+              $('#event_start_time').datetimepicker({
+                inline: true,
+                sideBySide: true,
+                format: 'DD-MM-YYYY hh:mm A Z',
+                locale: 'es', // Establecer el idioma español
+                defaultDate: moment("<%= @event.start_time.blank? ? Time.now.strftime('%d-%m-%Y %I:%M %p') : @event.start_time.strftime('%d-%m-%Y %I:%M %p') %>", "DD-MM-YYYY hh:mm A Z")
+              });
+            
+              $('#event_start_time').on("change.datetimepicker", function (e) {
+                $('#event_end_time').datetimepicker('minDate', e.date);
+              });
+            });
+          </script>
+        </fieldset>
+      <% end %>
+    </div>
+  </div>
+</div>

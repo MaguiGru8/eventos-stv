@@ -1,0 +1,9 @@
+{
+$('#v-pills-elc-<%= @event_location_track.event_location.id %>').replaceWith($('<%= escape_javascript render 'events/event_location_track', index: 0, elc: @event_location_track.event_location, event:  @event_location_track.event_location.event %>'));
+let notification = new Noty({
+text: 'Eliminado!',
+theme: 'relax',
+type: 'warning',
+timeout: 1500
+}).show();
+}

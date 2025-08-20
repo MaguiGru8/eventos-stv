@@ -1,0 +1,44 @@
+<section id="all-responses">
+  <% if @entry_passes %>
+    <h1 class="text-center"><%= @entry_passes[0].event.name %></h1>
+    <div class="text-center">
+      <span class="badge badge-info">Confirmaciones: <%= @entry_passes.length %></span>
+      <span class="badge badge-success">Asistentes: <%= @entry_passes.select{|ep| ep.attendance == true}.length %></span>
+      <span class="badge badge-dark">No invitados: <%= @entry_passes.select{|ep| ep.uninvited == true}.length %></span>
+    </div>
+  <% end %>
+  <div id="email-entry-pass-filter" class="form-group mt-5 col-md-4 offset-md-4">
+    <input type="text" class="form-control" id="responses-filter" placeholder="Introduzca su correo electrónico o código de acceso de entrada">
+  </div>
+  <ul class="list-group col-md-8 offset-md-2">
+    <% @all_response_groups.group_by(&:user_id).each do |user_id, responses| %>
+      <li class="list-group-item user-info">
+        <div class="d-flex">
+          <div class="col-3 user-info-container">
+            <div>
+              <div>
+                <%= image_tag url_for(responses[0].user.avatar), width: 35, class: 'mr-2' %>
+              </div>
+              <p><%= responses[0].user.name %></p>
+              <p class="user-email"><%= responses[0].user.email %></p>
+            </div>
+          </div>
+          <div class="col-9">
+            <% responses.each do |resp| %>
+              <ul class="list-group ">
+                <li class="list-group-item">
+                  <div>
+                    <p class="mb-0">
+                      <%= resp.event_data_form_entity_group.name %>
+                    </p>
+                    <%= render 'data_form_entity_response_groups/registration_status_actions', dferg: resp, entry_pass: @entry_passes.select{|ep| ep.user_id == resp.user_id && ep.event_id == resp.event_data_form_entity_group.event_id}.first %>
+                  </div>
+                </li>
+              </ul>
+            <% end %>
+          </div>
+        </div>
+      </li>
+    <% end %>
+  </ul>
+</section>

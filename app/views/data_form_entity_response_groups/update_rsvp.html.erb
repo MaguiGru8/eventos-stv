@@ -1,0 +1,24 @@
+<% content_for :page_title do %>
+  <%= @dferg.event_data_form_entity_group.event.kommunity.name %> | <%= @dferg.event_data_form_entity_group.event.name %> | Selección ponencia
+<% end %>
+<section id="update-rsvp-status-from-mail">
+  <div class="text-center">
+    <p>Tu estado de preselección es <strong><%= @dferg.event_data_form_entity_group.event.name %></strong> by <strong><%= @dferg.event_data_form_entity_group.event.kommunity.name %></strong></p>
+    <div>
+      <h5><%= translate_to_es(@dferg.registration_status.name)%></h5>
+      <% if @dferg.registration_status?([NameValues::RegistrationStatusType::CONFIRMED]) %>
+        <p><i class="fas fa-check-circle fa-5x text-success"></i></p>
+        <p>¡Solo un paso más y pronto te enviaremos un Pase de Entrada Único!</p>
+        <p>¿Estás listo?</p>
+        <% if @dferg.event_data_form_entity_group.registration_type?([NameValues::RegistrationsType::SPEAKER]) %>
+          <h4>
+            <%= link_to '**Haga clic aquí para enviar los enlaces a sus diapositivas lo antes posible**', new_speaker_resource_path(kommunity: @dferg.event_data_form_entity_group.event.kommunity, id: @dferg.event_data_form_entity_group.event.slug, token: @dferg.rsvp_token) %>
+          </h4>
+        <% end %>
+      <% elsif @dferg.registration_status?([NameValues::RegistrationStatusType::CANCELLED]) %>
+        <p><i class="fas fa-times-circle fa-5x text-info"></i></p>
+        <p>¡Nos vemos en otra ocasión! ¡Nuestros mejores deseos!</p>
+      <% end %>
+    </div>
+  </div>
+</section>

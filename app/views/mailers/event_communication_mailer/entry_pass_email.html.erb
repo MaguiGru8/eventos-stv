@@ -1,0 +1,32 @@
+<table style="width: 550px; margin: 0 auto; background-color: white; border-radius: 5px; padding: 25px;">
+  <tbody>
+    <tr>
+      <td>
+        <p>Hola <%= @user.name %></p>
+        <p>Éste es tu <strong>CÓDIGO DE ACCESO</strong> para asistir al <strong><%= @event.name %></strong>. ¡Por favor sé puntual!</p>
+        <% if !@message.blank? %>
+          <hr>
+          <h3 style="text-align: center;">Los organizadores han incluido un mensaje</h3>
+          <blockquote style="border: 1px dashed lightgrey; border-radius: 5px; padding: 5px;">
+            <%= @message.html_safe %>
+          </blockquote>
+          <hr>
+        <% end %>
+        <div style="text-align: center">
+        </div>
+        <div>
+          <h1 class="text-center;"><%= @event.name %></h1>
+          <div style="border: 1px dotted grey; background-color: #3f76e0; color: white; text-align: center; padding-bottom: 10px;">
+            <p>Tu código único</p>
+            <h1>
+              <%= @dferg.event_data_form_entity_group.event.event_entry_passes.find_by(user: @dferg.user).unique_code %>
+            </h1>
+            <small>*¡Este código será necesario para poder entrar al evento!</small>
+          </div>
+          <%= render 'mailers/event_communication_mailer/event_details_options' %>
+          <hr>
+        </div>
+      </td>
+    </tr>
+  </tbody>
+</table>

@@ -1,0 +1,30 @@
+<div class="card event event-mini-card">
+  <% if controller_name.to_sym != :events %>
+    <%= link_to kommunity_show_path(event.kommunity), class: "clickable-card" do %>
+      <d class="card-header d-flex align-items-center justify-content-between p-1 px-3">
+        <p class="mb-0 ml-3">
+          <%= event.kommunity.name %>
+        </p>
+        <div class="kommunity-logo-image">
+          <img  alt="<%= event.kommunity.name %> Logo" src="<%= event.kommunity.logo_image.attached? ?  url_for(event.kommunity.logo_image) : '' %>">
+        </div>
+      </d>
+    <% end %>
+  <% end %>
+  <%= link_to event_path(event.kommunity, event), class: "clickable-card" do %>
+    <div class="card-body pb-0">
+      <h5 class="card-title"><%= event.name %></h5>
+      <div class="event-timing">
+        <%= render 'events/event_time_display', event: event %>
+      </div>
+      <div class="card-text">
+        <div class="description ">
+          <%= truncate_html(event.description, length: 350, omission: '...')%>
+        </div>
+      </div>
+    </div>
+    <div class="card-footer text-muted mt-0">
+      <h6 class="text-info"><%= t('events.details') %></h6>
+    </div>
+  <% end %>
+</div>

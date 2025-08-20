@@ -1,0 +1,54 @@
+<div id="registration-response-status-actions-<%= dferg.id %>">
+  <ul class="registration-status-actions-list list-group d-flex flex-row">
+    <% icon_map = {
+    'Registrado' => 'fa-user-check',
+    'Pendiente' => 'fa-hourglass-half',
+    'Preseleccionado' => 'fa-user-clock',
+    'Confirmado' => 'fa-check-circle',
+    'Cancelado' => 'fa-times-circle'
+  } %>
+    <% dferg.event_data_form_entity_group.registration_type.registration_statuses.each do |regst| %>
+      <% status_name = translate_to_es(regst.name) %>
+      <% icon_class = icon_map[status_name] || 'fa-question-circle' %>
+      <% active = dferg.registration_status == regst %>
+      <li class="list-group-item p-0 border-0 mr-1">
+        <%= link_to update_response_registration_status_path(id: dferg, registration_status: regst),
+                  method: :put,
+                  remote: true,
+                  class: "btn btn-outline-primary d-flex align-items-center px-3 py-2 #{'active' if active}" do %>
+          <i class="fas <%= icon_class %> mr-2"></i>
+          <%= status_name %>
+        <% end %>
+      </li>
+    <% end %>
+  </ul>
+  <% if (dferg.event_data_form_entity_group.registration_type? [NameValues::RegistrationsType::SPEAKER, NameValues::RegistrationsType::ATTENDEE]) && dferg.event_data_form_entity_group.event.event_locations.length > 1 %>
+    <ul class="user-event-locations-list list-group d-flex flex-row p-1">
+      <% UserEventLocation.get_display_locations(dferg, dferg.event_data_form_entity_group.event).each do |k, v| %>
+        <li class="list-group-item bg-light m-1 border-0 mr-2 p-1 border-right">
+          <%= link_to update_user_event_selected_location_path(dferg: dferg, event_location_id: v[:event_location_id]), class: "#{'badge badge-pill badge-primary' if(v[:is_selected])}", remote: true, method: :put do %>
+            <i class="fas fa-map-marker-alt mr-1"></i> <%= v[:location].name %>
+          <% end %>
+        </li>
+      <% end %>
+    </ul>
+  <% end %>
+  <div class="event-entry-pass-actions d-flex justify-content-space-around">
+    <% if dferg.registration_status.confirmed? && !entry_pass.blank? %>
+      <p class="m-1">
+        Clave de acceso único <strong class="user-entry-pass-code"><%= entry_pass.unique_code %></strong>
+      </p>
+      <p class="m-1">
+        <%= link_to 'Asistente', toggle_attendance_event_entry_pass_path(id: entry_pass, data_form_entity_response_group: dferg), method: :patch, remote: true, class: "badge #{entry_pass.attendance ? 'badge-success' : 'badge-light'}"  %>
+      </p>
+    <% end %>
+    <% if dferg.registration_status.confirmed? && entry_pass.blank? %>
+      <p class="badge badge-success mt-2 mb-2">
+        <%= link_to 'Generar clave de acceso único', event_entry_passes_path(data_form_entity_response_group: dferg), method: :post, remote: true, class: 'text-white' %>
+      </p>
+    <% end %>
+  </div>
+  <div class="">
+    <%= render 'data_form_entity_response_groups/registration_status_communication_actions', dferg: dferg %>
+  </div>
+</div>

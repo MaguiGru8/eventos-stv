@@ -1,0 +1,221 @@
+<% content_for :page_title do %>
+  <%= @event.kommunity.name %> | <%= @event.name %> | <%= @data_form_entity.entity.name %> | Form
+<% end %>
+<% content_for :page_stylesheets do %>
+  <%= stylesheet_link_tag 'readmore', media: 'all' %>
+  <style>
+    .form-container {
+      max-width: 800px;
+      margin: 2rem auto;
+      padding: 2rem;
+      box-shadow: 0 0 20px rgba(0,0,0,0.1);
+      border-radius: 10px;
+      background: white;
+    }
+    
+    .form-header {
+      background: linear-gradient(45deg, #2193b0, #6dd5ed);
+      color: white;
+      padding: 2rem;
+      border-radius: 10px 10px 0 0;
+      margin: -2rem -2rem 2rem -2rem;
+    }
+    
+    .profile-image-input {
+      padding: 2rem;
+      border: 2px dashed #dee2e6;
+      border-radius: 8px;
+      margin: 1rem 0;
+    }
+    
+    .existing-profile-image img {
+      max-width: 150px;
+      border-radius: 50%;
+      margin: 1rem 0;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+    
+    .question-card {
+      border: none;
+      border-left: 4px solid #2193b0;
+      margin-bottom: 1rem;
+      transition: all 0.3s ease;
+    }
+    
+    .question-card:hover {
+      transform: translateX(5px);
+      box-shadow: 0 0 15px rgba(0,0,0,0.1);
+    }
+    
+    .required-asterisk {
+      color: #dc3545;
+      margin-left: 4px;
+    }
+    
+    .submit-button {
+      background: linear-gradient(45deg, #2193b0, #6dd5ed);
+      color: white;
+      padding: 0.8rem 2rem;
+      border: none;
+      border-radius: 25px;
+      transition: all 0.3s ease;
+    }
+    
+    .submit-button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+    }
+  </style>
+<% end %>
+<section id="fill-form" class="py-5">
+  <% if @data_form_entity.can_fill_event_form(current_user) %>
+    <div class="container form-container">
+      <!-- Form Header -->
+      <div class="form-header text-center">
+        <h2 class="mb-0"><%= @data_form_entity.entity.name %></h2>
+      </div>
+      <!-- Event Information -->
+      <div class="event-info mb-4">
+        <%= render 'events/event_show_header', event: @event %>
+        <%= render 'events/event_description', event: @event, new_event_update: @new_event_update %>
+      </div>
+      <!-- Feedback Message -->
+      <% if @data_form_entity.entity.registration_type?([NameValues::RegistrationsType::FEEDBACK]) %>
+        <div class="alert alert-info text-center" role="alert">
+          <h5 class="mb-2">¡Fue genial tenerte en el evento!</h5>
+          <p class="mb-0">¡Sería genial saber cómo estuvo tu día!</p>
+        </div>
+      <% end %>
+      <!-- Existing Response Alert -->
+      <% if !@existing_response.blank? %>
+        <div class="alert alert-warning text-center" role="alert">
+          <i class="fas fa-info-circle mr-2"></i>Ya has rellenado el formulario, ¡no dudes en actualizar tu respuesta!
+        </div>
+      <% end %>
+      <!-- Form Content -->
+      <div class="form-content">
+        <%= form_with scope: :data_form_entity_response, url: submit_form_response_path(data_form_entity_id: @data_form_entity, for_other_user: @for_other_user, ots: @ots) do |f| %>
+          <!-- User Information Section -->
+          <% if user_signed_in? && !@for_other_user %>
+            <div class="card mb-4">
+              <div class="card-body">
+                <h4 class="card-title mb-4 text-primary">Información Personal</h4>
+                <!-- Profile Image -->
+                <div class="form-group profile-image-input">
+                  <h6 class="text-muted">Añade una foto</h6>
+                  <% if current_user.avatar %>
+                    <div class="existing-profile-image">
+                      <img id="user-profile-image" alt="Añade una foto" src="<%= url_for(current_user.avatar) %>">
+                    </div>
+                  <% end %>
+                  <%= f.file_field :profile_image, onchange: 'showImage(this, "user-profile-image");', accept: "image/*", class: 'form-control-file' %>
+                </div>
+                <!-- User Fields -->
+                <div class="form-group">
+                  <%= f.label :designation, "Tu nombre completo", class: "font-weight-bold" %>
+                  <small class="form-text text-muted mb-2">Si eres un orador, esto será visible en tu tarjeta de perfil</small>
+                  <%= f.text_field :designation, placeholder: "Por ejemplo fundador de SpaceX, CEO de Meta", value: current_user.designation, class: 'form-control' %>
+                </div>
+                <div class="form-group">
+                  <%= f.label :about_me, "Contanos un poco de vos con tus palabras", class: "font-weight-bold" %>
+                  <%= f.text_area :about_me, placeholder: "Yo soy un master en tal cosa...", value: current_user.about_me, class: 'form-control', rows: 4 %>
+                </div>
+                <div class="form-group">
+                  <%= f.label :linkedin_profile, 'Perfil de Linkedin', class: "font-weight-bold" %>
+                  <small class="form-text text-muted mb-2">Por favor, proporcione el enlace completo</small>
+                  <%= f.text_field :linkedin_profile, placeholder: "https://www.linkedin.com/in/tu-perfil", value: current_user.linkedin, class: 'form-control' %>
+                </div>
+                <div class="form-group">
+                  <%= f.label :personal_website, '¿Tenés una web sobre vos?', class: "font-weight-bold" %>
+                  <small class="form-text text-muted mb-2">No redes sociales</small>
+                  <%= f.text_field :personal_website, placeholder: "https://tu-sitio-web.com", value: current_user.personal_website, class: 'form-control' %>
+                </div>
+                <div class="form-group">
+                  <%= f.label :twitter_profile, '¿Tenés Twitter? (actualmente llamado X)', class: "font-weight-bold" %>
+                  <%= f.text_field :twitter_profile, placeholder: "@tuarroba", value: current_user.twitter, class: 'form-control' %>
+                </div>
+              </div>
+            </div>
+          <% end %>
+          <!-- Questions Section -->
+          <div class="questions-section">
+            <h4 class="text-primary mb-4">Preguntas</h4>
+            <% @data_form_entity.data_form.questions.each.with_index(1) do |question, index| %>
+              <div class="card question-card mb-3">
+                <div class="card-body">
+                  <h5 class="card-title">
+                    <%= question.title %>
+                    <% if question.required %>
+                      <span class="required-asterisk">*</span>
+                    <% end %>
+                  </h5>
+                  <% if !question.description.blank? %>
+                    <p class="text-muted"><small><%= simple_format(question.description) %></small></p>
+                  <% end %>
+                  <% case question.question_type.name %>
+                  <% when "short_answer" %>
+                  <%= f.text_field question.id, placeholder: "Respuesta corta", required: question.required, value: @existing_response[question.id], class: "form-control" %>
+                  <% when "long_answer" %>
+                  <%= f.text_area question.id, placeholder: "Respuesta larga", required: question.required, value: @existing_response[question.id], class: "form-control" %>
+                  <% when "number" %>
+                  <%= f.number_field question.id, placeholder: "Sólo números", required: question.required, value: @existing_response[question.id], class: "form-control" %>
+                  <% when "single_choice" %>
+                  <% question.question_choices.order('created_at asc').each do |choice| %>
+                    <div class="custom-control custom-radio">
+                      <%= f.radio_button question.id, choice.id, id: "radio-#{choice.id}", required: question.required, checked: (@existing_response[question.id] == choice.id), class: 'custom-control-input' %>
+                      <%= f.label "#{question.id}_#{choice.id}", choice.title, class: 'custom-control-label', for: "radio-#{choice.id}" %>
+                    </div>
+                  <% end %>
+                  <% when "multiple_choice" %>
+                  <%= f.collection_check_boxes question.id, question.question_choices.all, :id, :title do |b| %>
+                    <div class="custom-control custom-checkbox">
+                      <%= b.check_box(class: 'custom-control-input') %>
+                      <%= b.label(class: 'custom-control-label') %>
+                    </div>
+                  <% end %>
+                <% end %>
+              </div>
+            </div>
+          <% end %>
+        </div>
+        <!-- Location Grid if needed -->
+        <% if @data_form_entity.entity.registration_type?([NameValues::RegistrationsType::SPEAKER, NameValues::RegistrationsType::ATTENDEE]) %>
+          <div class="location-grid mt-4">
+            <%= render 'data_form_entity_responses/user_event_location_grid', f: f, event: @event, event_locations: @event.event_locations %>
+          </div>
+        <% end %>
+        <!-- Submit Button -->
+        <div class="text-center mt-4">
+          <%= f.submit 'Guardar', class: 'submit-button' %>
+        </div>
+      <% end %>
+    </div>
+  </div>
+<% else %>
+  <div class="text-center py-5">
+    <div class="alert alert-warning d-inline-block">
+      <h2 class="mb-0">
+        <% if @data_form_entity.members_who_have_attended? %>
+          <i class="fas fa-lock mr-2"></i>Shh... ¡Esto está escondido!
+        <% else %>
+          <i class="fas fa-clock mr-2"></i>¡Este formulario está cerrado, a menos que los organizadores lo digan!
+        <% end %>
+      </h2>
+    </div>
+  </div>
+<% end %>
+</section>
+<% content_for :page_scripts do %>
+  <% if !user_signed_in? %>
+    <script>
+      window.onload = function() {
+        $('#force-sign-in-modal').modal({
+          backdrop: 'static',
+          keyboard: false
+        }).modal('show');
+      }
+      localStorage.setItem('previous_url', window.location.href);
+    </script>
+  <% end %>
+  <%= javascript_include_tag 'readmore' %>
+<% end %>

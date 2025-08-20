@@ -1,0 +1,50 @@
+<li class="list-group-item">
+  <div>
+    <div class="d-flex">
+      <p class="mb-0">
+        <% if comment.user.avatar %>
+          <%= image_tag comment.user.avatar, width: 45, class: 'mr-2' %>
+        <% end %>
+      </p>
+      <div>
+        <p class="mb-0 text-muted">
+          <small>
+            <%= comment.user.name %>
+            <% if comment.user.role?(:organizer, comment.event.kommunity_id) %>
+              <span>&nbsp(Organizer)</span>
+            <% end %>
+          </small>
+        </p>
+        <%= simple_format(comment.body, class: 'mb-0') %>
+        <small class="comment-timestamp text-muted"><%= time_ago_in_words(comment.created_at) %></small>
+      </div>
+    </div>
+    <ul id="comment-comments-list-<%= comment.id %>" class="list-group list-group-flush comment-comments">
+      <% comment.comments.order('created_at').each do |cc| %>
+        <%= render 'comments/comment', comment: cc %>
+      <% end %>
+    </ul>
+  </div>
+  <% if user_signed_in? %>
+    <% if comment.commentable_type == 'Event-Disabled' %>
+      <a href="#" class="comment-reply-button pl-2" id="comment-comments-reply-<%= comment.id %>" >Reply</a>
+      <%= form_for comment.comments.new, url: comment_comments_path(comment_id: comment), html: {class: 'row hidden-item comment-comments-form', id: "comment-comments-form-#{comment.id}"}, remote: true do |f| %>
+        <div class="col-10" onkeydown="">
+          <%= f.text_area :body, class: 'form-control', rows: 1, placeholder: 'Reply...', onkeydown: 'textAreaRowIncrementor(event, this);' %>
+        </div>
+        <div class="col-2">
+          <%= button_tag type: 'submit', class: "btn btn-info p-2 comment-submit-button" do %>
+            <i class='fas fa-arrow-alt-circle-right fa-2x text-white'></i>
+          <% end %>
+        </div>
+        <script>
+          $('#comment-comments-reply-<%= comment.id %>').click(function(){
+              event.preventDefault();
+             $('#comment-comments-form-<%= comment.id %>').removeClass('hidden-item');
+             $(this).remove();
+          });
+        </script>
+      <% end %>
+    <% end %>
+  <% end %>
+</li>

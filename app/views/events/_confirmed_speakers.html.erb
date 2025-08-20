@@ -1,0 +1,10 @@
+<div id="confirmed-event-speakers-<%= event.id %>" class="shortlisted-speakers-container">
+  <h3>Los oradores/ponentes</h3>
+  <ul class="list-group d-flex flex-row flex-wrap justify-content-around p-3 bg-white shortlisted-speakers-list">
+    <% event.confirmed_speaker_registrations.shuffle.each do |evs| %>
+      <li class="list-group-item shadow-sm mb-3">
+        <%= render 'speaker_display_card', user: evs.user %>
+      </li>
+    <% end %>
+  </ul>
+</div>

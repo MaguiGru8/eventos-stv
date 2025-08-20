@@ -1,0 +1,27 @@
+<div id="registration-communication-actions-<%= dferg.id %>">
+  <% if !(["registered", "waiting", "confirmed", "cancelled"].include? dferg.registration_status.name) %>
+    <%= link_to "Enviar confirmación para asistir al evento", data_form_entity_response_group_rsvp_email_event_communication_mailers_path(data_form_entity_response_group: dferg.id), class: "btn btn-primary btn-sm", remote: true %>
+  <% end %>
+  <% if (dferg.registration_status.confirmed?) %>
+    <%= link_to "Enviar clave de acceso único", data_form_entity_response_group_entry_pass_email_event_communication_mailers_path(data_form_entity_response_group: dferg.id), class: "badge badge-primary", remote: true %>
+  <% end %>
+  <p class="text-info">
+    <% if !dferg.fixed_emails_delivered_types.empty? %>
+      <small>
+        <strong>Info enviada</strong>:
+        <%= dferg.fixed_emails_delivered_types.uniq.map { |t|
+            case t
+            when 'rsvp'
+              'Confirmación de asistencia'
+            when 'entry_pass'
+              'Pase de entrada'
+            else
+              t
+            end
+          }.join(', ')
+      %>
+      </small>
+    <% end %>
+  </p>
+</div>
+<!--Change the status to confirmed as soon as an entry pass is sent-->

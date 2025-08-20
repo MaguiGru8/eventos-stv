@@ -1,0 +1,27 @@
+<section class="col-md-8 offset-md-2" id="speaker-resources-<%= @dferg.id %>">
+  <h2 class="mb-0 text-center">
+    <%= @dferg.event_data_form_entity_group.event.name %> :: Detalles de la sesión del orador
+  </h2>
+  <div class="mb-5 text-center"><%= render 'events/event_time_display', event: @dferg.event_data_form_entity_group.event %></div>
+  <% if user_signed_in? %>
+    <p>Hola! <strong><%= @dferg.user.name %></strong>, Por favor, rellene este formulario para finalizar los detalles de su sesión/taller para el evento.</p>
+  <% end %>
+  <%= form_for @spr, remote: true do |f| %>
+    <div class="form-group mt-3">
+      <%= f.label :session_details_links do %>
+        <h6 class="text-danger">[POR FAVOR, LEA ESTO CON CUIDADO]</h6>
+        <p class="mb-0 mt-3">Mencione todos los detalles de su sesión, a saber:</p>
+        <ul>
+          <li><strong>Enlaces a diapositivas [si utiliza alguna]</strong></li>
+          <li>Explique los detalles de su charla/sesión/taller y los diferentes temas que cubrirá.</li>
+        </ul>
+        <p>Todos estos detalles se compartirán con todos los asistentes al evento. ¡Por favor, colóquelos de manera que les resulten útiles incluso después del evento!</p>
+        <p class="text-info">Puede guardar un borrador y completarlo antes de la última fecha</p>
+      <% end %>
+      <%= f.hidden_field :token, value: @dferg.rsvp_token %>
+      <%= f.text_field :title, required: true, class: 'form-control', placeholder: 'Título final de tu charla*', required: true %>
+      <%= f.text_area :session_details_links, required: true, class: 'form-control', rows: 10, placeholder: '¡Empiece a escribir aquí [Este campo es obligatorio]!', required: true %>
+    </div>
+    <%= f.submit 'Guardar', class: 'btn btn-info' %>
+  <% end %>
+</section>

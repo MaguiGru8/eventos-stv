@@ -1,0 +1,149 @@
+<% content_for :page_title do %>
+  <%= @kommunity.name %>
+<% end %>
+<section id="kommunity-<%= @kommunity.id %>">
+  <div class="card bg-white p-3 mb-3 d-flex flex-row flex-wrap">
+    <div class="col-md-3 d-flex flex-column align-items-center">
+      <% if @kommunity.logo_image.attached? %>
+        <div class="kommunity-logo-image-large">
+          <img  alt="<%= @kommunity.name %> Logo" src="<%= url_for(@kommunity.logo_image)%>">
+        </div>
+      <% end %>
+      <h4 class="text-secondary mt-3">
+        <%= @kommunity.name %>
+      </h4>
+      <% if allowed_view?(:kommunities, :edit) %>
+        <span class="badge badge-primary badge-pill mt-2">
+          <%= link_to 'Editar', edit_kommunity_path(@kommunity), class: 'text-white' %>
+        </span>
+      <% end %>
+    </div>
+    <div class="col-md-9" id="about-community">
+      <div class="pl-5 pt-3">
+        <%= @kommunity.about.html_safe %>
+      </div>
+    </div>
+  </div>
+  <% if allowed_view?(:events, :create) && current_user.organizer?(@kommunity.id) %>
+    <div class="card my-4 p-3 d-flex flex-row justify-content-start">
+      <%=  link_to new_event_path, class: 'mr-4 btn btn-outline-secondary', target: "_blank" do %>
+        <span><i class="fas fa-plus-circle fa-1x text-success"></i> Crear evento</span>
+      <% end %>
+      <%=  link_to new_data_form_path, class: 'mr-4 btn btn-outline-secondary', target: "_blank" do %>
+        <span><i class="fas fa-plus-circle fa-1x text-success"></i> Crear formulario </span>
+      <% end %>
+    </div>
+  <% end %>
+  <% if user_signed_in? && current_user.organizer?(@kommunity.id) %>
+    <div class="row">
+      <div class="accordion col-md-4" id="kommunity-events">
+        <!--upcoming events-->
+        <div class="card">
+          <div class="card-header" id="headingOne">
+            <h5 class="mb-0">
+              <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                Próximos eventos
+              </button>
+            </h5>
+          </div>
+          <div id="collapseOne" class="collapse show" aria-labelledby="headingOne" data-parent="#kommunity-events">
+            <div class="card-body">
+              <ul class="list-group">
+                <% @events.select{|ev| ev.start_time >= Time.now.beginning_of_day && ev.status?([NameValues::EventStatusType::ANNOUNCED, NameValues::EventStatusType::OPEN])}.each do |event| %>
+                  <li class="list-group-item">
+                    <%= link_to event.name.titleize, event_path(id: event), target: "_blank" %>
+                    <%= render 'events/event_time_display', event: event %>
+                  </li>
+                <% end %>
+              </ul>
+            </div>
+          </div>
+        </div>
+        <!-- drafts -->
+        <div class="card">
+          <div class="card-header" id="headingTwo">
+            <h5 class="mb-0">
+              <button class="btn btn-link collapsed" type="button" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                Eventos en borrador
+              </button>
+            </h5>
+          </div>
+          <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#kommunity-events">
+            <div class="card-body">
+              <ul class="list-group">
+                <% @events.select{|ev| ev.status?([NameValues::EventStatusType::DRAFT])}.each do |event| %>
+                  <li class="list-group-item">
+                    <%= link_to event.name.titleize, event_path(id: event), target: "_blank", class: 'text-secondary' %>
+                    <%= render 'events/event_time_display', event: event %>
+                  </li>
+                <% end %>
+              </ul>
+            </div>
+          </div>
+        </div>
+        <!-- past + cancelled events -->
+        <div class="card">
+          <div class="card-header" id="headingThree">
+            <h5 class="mb-0">
+              <button class="btn btn-link collapsed" type="button" data-toggle="collapse" data-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+                Eventos pasados
+              </button>
+            </h5>
+          </div>
+          <div id="collapseThree" class="collapse" aria-labelledby="headingThree" data-parent="#kommunity-events">
+            <div class="card-body">
+              <ul class="list-group">
+                <% @events.select{|ev| ev.start_time <= Time.now.beginning_of_day && !ev.status?([NameValues::EventStatusType::DRAFT])}.each do |event| %>
+                  <li class="list-group-item bg-light">
+                    <%= link_to event.name.titleize, event_path(id: event), target: "_blank", class: 'text-muted' %>
+                    <%= render 'events/event_time_display', event: event %>
+                  </li>
+                <% end %>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-3 card p-0">
+        <ul class="list-group list-group-flush">
+          <li class="list-group-item list-group-item-primary">
+            <h5 class="m-0">Formularios</h5>
+          </li>
+          <% @kommunity.data_forms.order('created_at desc').each do |df| %>
+            <li class="list-group-item">
+              <%= link_to (df.name.blank? ? "sin nombre" : df.name), edit_data_form_path(@kommunity, df) %>
+            </li>
+          <% end %>
+        </ul>
+      </div>
+    </div>
+  <% end %>
+  <% if !@upcoming_events.empty? %>
+    <div class="col-md-10 offset-md-1 horizontal-cards mb-5">
+      <div>
+        <h3 class="border-bottom text-secondary">Próximos eventos</h3>
+      </div>
+      <div class="row d-flex flex-md-row flex-sm-column flex-nowrap">
+        <% @upcoming_events.each do |event| %>
+          <div class="col-md-4 m-2 p-0">
+            <%= render 'events/event_mini_card', event: event %>
+          </div>
+        <% end %>
+      </div>
+    </div>
+  <% end %>
+  <% if !@recent_past_events.empty? %>
+    <div class="col-md-10 offset-md-1 horizontal-cards">
+      <div>
+        <h3 class="border-bottom text-secondary">Eventos pasados ​​recientes</h3>
+      </div>
+      <div class="row d-flex flex-md-row flex-sm-column flex-nowrap">
+        <% @recent_past_events.each do |event| %>
+          <div class="m-2 p-0">
+            <%= render 'events/event_mini_card', event: event %>
+          </div>
+        <% end %>
+      </div>
+    </div>
+  <% end %>
+</section>

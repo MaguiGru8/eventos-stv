@@ -1,0 +1,27 @@
+<li class="list-group-item list-group-item-action flex-column align-items-start" id="event-data-form-entity-group-<%= edfeg.id %>">
+  <div class="d-flex justify-content-start">
+    <h5 class="mb-1 mr-3">
+      <%= edfeg.name %>
+      <small>(<%= translate_to_es(edfeg.registration_type.name) %>)</small>
+    </h5>
+    <div>
+      <%= link_to 'Ver respuestas', form_responses_path(event_data_form_entity_group_id: edfeg), class: 'btn btn-outline-info' %>
+      <% if DataFormEntityResponse.joins(:data_form_entity).where("data_form_entities.entity_id = ? and data_form_entities.entity_type = ?",  @edfeg, EventDataFormEntityGroup) %>
+        <%= link_to 'Borrar', destroy_form_set_event_path(id: event, event_data_form_entity_group_id: edfeg), method: :delete, remote: true, class: 'btn btn-outline-warning' %>
+      <% end %>
+    </div>
+  </div>
+  <ul id="event-data-form-entities-<%= edfeg.id %>">
+    <%= render partial: 'event_data_form_entity_groups/assigned_form_list_item', collection: edfeg.data_form_entities, as: :dfe, locals: {edfeg: edfeg} %>
+  </ul>
+  <div class="add-form-container <% if edfeg.data_form_entities.length > 0 %>d-none<% end %>">
+    <%= form_with url: assign_data_form_event_path(id: event, event_data_form_entity_group_id: edfeg), method: 'post', remote: true do |f| %>
+      <h6>Selecciona de donde proviene</h6>
+      <div class="form-group">
+        <%= f.label :data_form, 'Formulario principal' %>
+        <%= f.select :data_form_id, options_for_select(edfeg.event.kommunity.data_forms.all.collect{|m| [m.name, m.id]}), {required: true}, class: 'form-control' %>
+        <%= f.submit "Asignar a formulario", class: 'btn btn-info', style: 'margin-top: 10px;' %>
+      </div>
+    <% end %>
+  </div>
+</li>

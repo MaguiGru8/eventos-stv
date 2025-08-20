@@ -1,0 +1,12 @@
+{
+function addFormSet(){
+let newAssignedFormListItem = $('#form-set-list').append($("<%= escape_javascript render 'event_data_form_entity_groups/form_set', edfeg: @edfeg, event: @event %>"));
+let notification = new Noty({
+text: 'Nuevo formulario del evento creado',
+theme: 'relax',
+type: 'success',
+timeout: 1500
+}).show();
+}
+addFormSet();
+}

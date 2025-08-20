@@ -1,0 +1,10 @@
+{
+$('#event-location-<%= @location.id %>').parent().parent().remove();
+$('#v-pills-elc-<%= @event_location.id %>-tab').remove()
+let notification = new Noty({
+text: 'Ubicación borrada',
+theme: 'relax',
+type: 'warning',
+timeout: 1500
+}).show();
+}

@@ -1,0 +1,14 @@
+<div id="event-timing">
+  <% if event.start_time.to_date != event.end_time.to_date %>
+    <span>
+      <span>
+        <%= l(event.start_time, format: '%A').capitalize %>, <%= l(event.start_time, format: '%d de %B de %Y') %></span> <span class=""> <%= l(event.start_time, format: '%I:%M %p') %></span> -
+      <span><%= l(event.end_time, format: '%A').capitalize %>, <%= l(event.end_time, format: '%d de %B de %Y') %></span> <span class=""> <%= l(event.end_time, format: '%I:%M %p') %></span>
+    </span>
+  <% else %>
+    <span>
+      <span><%= l(event.start_time, format: '%A').capitalize %>, <%= l(event.start_time, format: '%d de %B de %Y') %></span>
+      <span class=""> <%= l(event.start_time, format: '%I:%M %p') %> a <%= l(event.end_time, format: '%I:%M %p') %></span>
+    </span>
+  <% end %>
+</div>

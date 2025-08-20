@@ -1,0 +1,74 @@
+// Place all the styles related to the events controller here.
+// They will automatically be included in application.css.
+// You can use Sass (SCSS) here: http://sass-lang.com/
+
+section#events-show{
+
+
+  .event-location{
+    overflow: hidden;
+  }
+
+
+  #v-pills-event-locations-tab{
+    width: 100%;
+    overflow-x: scroll;
+    flex-wrap: nowrap;
+  }
+
+
+  .form-link{
+    background: #f4ba2c;
+    color: white;
+  }
+
+
+  @media screen and (min-width: 640px) {
+    .event-description{
+      position: sticky;
+      top: 75px;
+      height: fit-content;
+    }
+  }
+
+
+
+}
+
+
+#all-responses{
+
+  #email-entry-pass-filter{
+    //margin-top: 75
+  }
+
+  .user-info-container{
+    position: relative;
+
+    div:first-child{
+      position: sticky;
+      top: 55px;
+      background: white;
+      z-index: 1;
+    }
+  }
+}
+
+
+
+section.event-update-display-card{
+  .event-update-display-list{
+    margin-top: 10px;
+    list-style: none;
+    padding-left: 5px;
+    li{
+      padding: 3px;
+      border-bottom: 1px solid lightgrey;
+      p{
+        margin: 5px 0;
+      }
+    }
+  }
+}
+
+

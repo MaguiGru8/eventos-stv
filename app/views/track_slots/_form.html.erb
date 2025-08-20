@@ -1,0 +1,52 @@
+<div>
+  <%= form_for track_slot, url: event_location_track_track_slots_path(event_location_track_id: event_location_track.id), html: {id: "track-slot-form-#{event_location_track.id}"}, method: 'post', remote: true do |f| %>
+    <h6>Agrega al ponente de esta sala</h6>
+    <div>
+      <div class="form-group">
+        <div>
+          <!--<input type="text" class="form-control datetimepicker-input" id="datetimepicker5" data-toggle="datetimepicker" data-target="#datetimepicker5"/>-->
+          <%= f.text_field :start_time, class: 'form-control datetimepicker-input', id: "track_slot_start_time_#{event_location_track.id}", 'data-toggle': 'datetimepicker', 'data-target': "#track_slot_start_time_#{event_location_track.id}", placeholder: 'Start Time', required: true %>
+        </div>
+      </div>
+      <div class="form-group">
+        <div>
+          <!--<input type="text" class="form-control datetimepicker-input" id="datetimepicker5" data-toggle="datetimepicker" data-target="#datetimepicker5"/>-->
+          <%= f.text_field :end_time, class: 'form-control datetimepicker-input', id: "track_slot_end_time_#{event_location_track.id}", 'data-toggle': 'datetimepicker', 'data-target': "#track_slot_end_time_#{event_location_track.id}", placeholder: 'End Time', required: true %>
+        </div>
+      </div>
+      <script>
+        $(function () {
+            moment.locale('es', {
+              months: 'Enero_Febrero_Marzo_Abril_Mayo_Junio_Julio_Agosto_Septiembre_Octubre_Noviembre_Diciembre'.split('_'),
+              monthsShort: 'Ene_Feb_Mar_Abr_May_Jun_Jul_Ago_Sep_Oct_Nov_Dic'.split('_'),
+              weekdays: 'Domingo_Lunes_Martes_Miércoles_Jueves_Viernes_Sábado'.split('_'),
+              weekdaysShort: 'Dom_Lun_Mar_Mié_Jue_Vie_Sáb'.split('_'),
+              weekdaysMin: 'Do_Lu_Ma_Mi_Ju_Vi_Sá'.split('_')
+            });
+        
+            $("#track_slot_start_time_<%=event_location_track.id%>").datetimepicker('format', 'DD-MM-YYYY hh:mm A');
+            $("#track_slot_start_time_<%=event_location_track.id%>").datetimepicker('defaultDate', moment("<%= event_location_track.event.start_time.blank? ? Time.now.strftime('%d-%m-%Y %I:%M %p') : event_location_track.event.start_time.strftime('%d-%m-%Y %I:%M %p %z') %>", "DD-MM-YYYY hh:mm A Z"));
+            $("#track_slot_start_time_<%=event_location_track.id%>").datetimepicker('locale', 'es');
+        
+        
+            $("#track_slot_end_time_<%=event_location_track.id%>").datetimepicker('format', 'DD-MM-YYYY hh:mm A');
+            $("#track_slot_end_time_<%=event_location_track.id%>").datetimepicker('defaultDate', moment("<%= event_location_track.event.start_time.blank? ? Time.now.strftime('%d-%m-%Y %I:%M %p') : event_location_track.event.start_time.strftime('%d-%m-%Y %I:%M %p %z') %>", "DD-MM-YYYY hh:mm A Z"));
+            $('#track_slot_start_time_<%=event_location_track.id%>').on("change.datetimepicker", function (e) {
+              $('#track_slot_end_time_<%=event_location_track.id%>').datetimepicker('minDate', e.date);
+            });
+            $("#track_slot_end_time_<%=event_location_track.id%>").datetimepicker('locale', 'es');
+        
+        });
+      </script>
+    </div>
+    <div class="form-group">
+      <%= f.text_field :session_title, class: 'form-control', required: true, placeholder: "Nombre de la charla" %>
+    </div>
+    <div class="form-group">
+      <%= f.select :speaker_registration_id, options_for_select(event_location_track.event.get_available_speakers.collect{|m| [m.user.name, m.id]}), {:include_blank => 'Selecciona el ponente'}, class: 'form-control' %>
+    </div>
+    <div class="form-group">
+      <%= f.submit "Añadir sala del ponente", class: 'btn btn-outline-warning text-primary' %>
+    </div>
+  <% end %>
+</div>

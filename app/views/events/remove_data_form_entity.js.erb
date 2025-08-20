@@ -1,0 +1,16 @@
+{
+function removeAssignedForm(){
+let dfe = $('#form-set-list .data-form-entity-<%= @dfe.id %>')
+if (<%= @dfe.entity.data_form_entities.length == 0 %>){
+dfe.parent().siblings('.add-form-container').removeClass('d-none');
+}
+dfe.remove();
+let notification = new Noty({
+text: 'Formulario asignado eliminado',
+theme: 'relax',
+type: 'warning',
+timeout: 1500
+}).show();
+}
+removeAssignedForm();
+}

@@ -1,0 +1,31 @@
+<div class="registration-status-counter" id="registration-status-counter-filter-<%= edfeg.id %>">
+  <ul class="list-group  d-flex flex-row">
+    <% icon_map = {
+      'Todos' => 'fa-list',
+      'Registrado' => 'fa-user-check',
+      'Pendiente' => 'fa-hourglass-half',
+      'Preseleccionado' => 'fa-user-clock',
+      'Confirmado' => 'fa-check-circle',
+      'Cancelado' => 'fa-times-circle'
+    } %>
+    <li class="list-group-item p-0 border-0 mr-1 <%= selected_status.blank? ? 'active' : '' %>" data-regstatus="all">
+      <%= link_to form_responses_path(event_data_form_entity_group_id: edfeg),
+                  class: "btn btn-outline-secondary d-flex align-items-center #{selected_status.blank? ? 'active' : ''}" do %>
+        <i class="fas <%= icon_map['Todos'] %> mr-2"></i>
+        Todos : <%= edfeg.data_form_entity_response_groups.length %>
+      <% end %>
+    </li>
+    <% edfeg.registration_status_counts.each do |k, v| %>
+      <% status_name = translate_to_es(k) %>
+      <% icon_class = icon_map[status_name] || 'fa-question-circle' %>
+      <% active = selected_status.to_i == v[:registration_status_id].to_i %>
+      <li class="list-group-item p-0 border-0 mr-1 <%= active ? 'active' : '' %>" data-regstatus="<%= v[:registration_status_id].to_i %>">
+        <%= link_to form_responses_path(event_data_form_entity_group_id: edfeg, registration_status: v[:registration_status_id]),
+                    class: "btn btn-outline-secondary d-flex align-items-center #{active ? 'active' : ''}" do %>
+          <i class="fas <%= icon_class %> mr-2"></i>
+          <%= status_name %>s : <%= v[:count] %>
+        <% end %>
+      </li>
+    <% end %>
+  </ul>
+</div>

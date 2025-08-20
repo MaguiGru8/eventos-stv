@@ -1,0 +1,14 @@
+// Colores principales del tema
+$primary: #2c3e50;    // Azul oscuro profesional
+$secondary: #95a5a6;  // Gris neutro
+$success: #27ae60;    // Verde esmeralda
+$info: #3498db;       // Azul claro
+$warning: #f39c12;    // Naranja suave
+$danger: #e74c3c;     // Rojo suave
+$light: #ecf0f1;      // Gris muy claro
+$dark: #2c3e50;       // Azul oscuro
+
+// Variables adicionales de color
+$body-bg: #f5f6fa;    // Color de fondo del body
+$link-color: #3498db; // Color de los enlaces
+$link-hover-color: darken($link-color, 15%);

@@ -1,0 +1,91 @@
+<section id="session-discussion-<%= @resource.id %>">
+  <div class="header d-flex mb-3 flex-wrap">
+    <div class="card p-2 col-md-2 col-12 text-center mb-2">
+      <%= render 'events/speaker_display_card', user: @resource.user %>
+    </div>
+    <div class="card col-md-4 col-12 mb-2">
+      <div class="card-header">
+        <h5>
+          <%= @resource.data_form_entity_response_group.event_data_form_entity_group.event.name %>
+        </h5>
+        <div>
+          <%= render 'events/event_time_display', event: @resource.data_form_entity_response_group.event_data_form_entity_group.event %>
+        </div>
+      </div>
+      <div class="card-body">
+        <h5>
+          <%= @resource.title %>
+        </h5>
+        <div>
+          <%= simple_format(@resource.session_details_links) %>
+        </div>
+      </div>
+    </div>
+    <div class="card col-md-6 col-12 mb-2">
+      <% if !@other_sessions.empty? %>
+        <div class="card-header">
+          Other Sessions
+        </div>
+        <div class="card-body">
+          <ul class="list-group">
+            <% @other_sessions.each do |session| %>
+              <li class="list-group-item ">
+                <%= link_to session.event.name, session_discussion_event_path(kommunity: @kommunity, id: session.event, speaker_resource: session.id) %>
+              </li>
+            <% end %>
+          </ul>
+        </div>
+      <% end %>
+    </div>
+  </div>
+  <div class="other-sessions d-flex justify-content-start">
+  </div>
+  <div class="current-discussions">
+    <% if allowed_view?(:discussions, :create) %>
+      <button type="button" class="btn btn-primary mb-3" data-toggle="modal" data-target="#new-discussion-modal">
+        Ask <%= @resource.user.name %>!
+      </button>
+    <% else %>
+      <%= link_to "Sign In / Sign Up To Create Discussion", class: 'btn btn-primary mb-3' %>
+    <% end %>
+    <div id="discussions-list-<%= @resource.id %>" class="card-columns">
+      <% @discussions.each do |disc| %>
+        <div class="mx-2 mb-3">
+          <%= render 'discussions/user_discussion', discussion: disc %>
+        </div>
+      <% end %>
+    </div>
+  </div>
+  <div class="new-discussion-modal">
+    <% if allowed_view?(:discussions, :create) %>
+      <div class="modal fade" id="new-discussion-modal" tabindex="-1" role="dialog" aria-labelledby="new-discussion-modal-title" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="new-discussion-modal-title">Start A Discussion!</h5>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body">
+              <div class="d-flex">
+                <div class="card-body">
+                  <%= render 'discussions/form', discussion: @discussion, parent_type: "SpeakerResource", parent_id: @resource.id %>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    <% end %>
+  </div>
+  <script>
+    let notification = new Noty({
+        text: '*¡Esta es una función Beta! <br>¡Las actualizaciones se enviarán por correo electrónico cada medianoche!',
+        theme: 'relax',
+        type: 'warning',
+        timeout: 2500,
+        layout: 'top'
+    }).show();
+  </script>
+</section>

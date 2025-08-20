@@ -1,0 +1,34 @@
+<div id="event-status-select" class="status-panel">
+  <div class="status-header">
+    <i class="fas fa-chart-line"></i>
+    <h2>Estado del evento</h2>
+  </div>
+  <div class="status-controls">
+    <div class="status-options position-relative">
+      <% event_statuses.each do |est| %>
+        <%# Asigna un ícono según el nombre del estado %>
+        <% icon_class = case est.name
+            when 'draft' then 'fas fa-pencil-alt text-secondary'
+            when 'open' then 'fas fa-unlock text-primary'
+            when 'announced' then 'fas fa-bullhorn text-info'
+            when 'ongoing' then 'fas fa-play text-success'
+            when 'completed' then 'fas fa-check-circle text-success'
+            when 'canceled' then 'fas fa-times-circle text-danger'
+            else 'fas fa-question-circle text-secondary'
+          end %>
+        <li class="status-option <%= est.name %> position-relative justify-content-center">
+          <%= link_to update_event_status_event_path(event_id: event, event_status: est.id),
+                        method: :put,
+                        remote: true,
+                        class: "d-flex align-items-center #{'active' if est == event.event_status}" do %>
+            <i class="<%= icon_class %> mr-2"></i>
+            <span><%= translate_to_es(est.name) %></span>
+            <% if est == event.event_status %>
+              <span class="badge badge-success mb-4 position-absolute">Actual</span>
+            <% end %>
+          <% end %>
+        </li>
+      <% end %>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,83 @@
+<% content_for :page_title do %>
+  Admin - Crear usuario
+<% end %>
+<div class="container mt-5 pt-5">
+  <div class="row">
+    <div class="col-12 col-md-8 offset-md-2">
+      <h1>Crear nuevo usuario</h1>
+      <%= form_with(model: [:admin, @user], local: true) do |form| %>
+        <% if @user.errors.any? %>
+          <div class="alert alert-danger">
+            <h2><%= pluralize(@user.errors.count, "error") %> prohibited this user from being saved:</h2>
+            <ul>
+              <% @user.errors.full_messages.each do |message| %>
+                <li><%= message %></li>
+              <% end %>
+            </ul>
+          </div>
+        <% end %>
+        <div class="form-group">
+          <%= form.label :name, 'Nombre' %>
+          <%= form.text_field :name, class: 'form-control', required: true %>
+        </div>
+        <div class="form-group">
+          <%= form.label :email, 'Correo' %>
+          <%= form.email_field :email, class: 'form-control', required: true %>
+        </div>
+        <div class="form-group">
+          <%= form.label :password, 'Contraseña' %>
+          <%= form.password_field :password, class: 'form-control', required: true %>
+          <small class="form-text text-muted">La contraseña debe tener al menos 6 caracteres.</small>
+        </div>
+        <div class="form-group">
+          <label>Roles</label>
+          <div class="role-selection">
+            <% @user_roles.each do |role| %>
+              <div class="form-check">
+                <%= check_box_tag 'user[role_ids][]', role.id, false, id: "role_#{role.id}", class: 'form-check-input role-checkbox', data: { role: role.name } %>
+                <%= label_tag "role_#{role.id}", translate_to_es(role.name), class: 'form-check-label' %>
+              </div>
+            <% end %>
+          </div>
+        </div>
+        <div class="form-group kommunity-selection" style="display: none;">
+          <%= form.label :kommunity_id, 'Seleccione curso o grupo (para el rol de Organizador)' %>
+          <%= form.collection_select :kommunity_id, @kommunities, :id, :name, { include_blank: 'Seleccione curso o grupo' }, { class: 'form-control' } %>
+        </div>
+        <div class="form-group">
+          <%= form.submit 'Crear usuario', class: 'btn btn-primary' %>
+          <%= link_to 'Cancelar', admin_users_path, class: 'btn btn-secondary ml-2' %>
+        </div>
+      <% end %>
+    </div>
+  </div>
+</div>
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    const roleCheckboxes = document.querySelectorAll('.role-checkbox');
+    const kommunitySelection = document.querySelector('.kommunity-selection');
+  
+    function checkOrganizerRole() {
+      let hasOrganizerRole = false;
+  
+      roleCheckboxes.forEach(function(checkbox) {
+        if (checkbox.dataset.role === 'organizer' && checkbox.checked) {
+          hasOrganizerRole = true;
+        }
+      });
+  
+      if (hasOrganizerRole) {
+        kommunitySelection.style.display = 'block';
+      } else {
+        kommunitySelection.style.display = 'none';
+      }
+    }
+  
+    roleCheckboxes.forEach(function(checkbox) {
+      checkbox.addEventListener('change', checkOrganizerRole);
+    });
+  
+    // Initial check
+    checkOrganizerRole();
+  });
+</script>

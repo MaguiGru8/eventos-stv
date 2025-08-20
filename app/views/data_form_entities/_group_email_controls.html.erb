@@ -1,0 +1,18 @@
+<div id="registration-communication-group-actions-<%= edfeg.id %>">
+  <ul class="list-group d-flex flex-row flex-wrap">
+    <% if @edfeg.registration_type?([NameValues::RegistrationsType::ATTENDEE, NameValues::RegistrationsType::SPEAKER]) %>
+      <li class="list-group-item border-0 p-0 m-1">
+        <%= link_to "Enviar correos de confirmación restantes", event_data_form_entity_group_rsvp_email_event_communication_mailers_path(event_data_form_entity_group: edfeg.id), remote: true, class: "btn btn-info btn-block d-flex align-items-center justify-content-center" %>
+      </li>
+      <li class="list-group-item border-0 p-0 m-1">
+        <%= link_to "Reenviar todos los correos de confirmación", event_data_form_entity_group_rsvp_email_event_communication_mailers_path(event_data_form_entity_group: edfeg.id, force: true), remote: true, class: "btn btn-info btn-block d-flex align-items-center justify-content-center" %>
+      </li>
+      <li class="list-group-item border-0 p-0 m-1">
+        <%= link_to "Enviar accesos únicos restantes", event_data_form_entity_group_entry_pass_email_event_communication_mailers_path(event_data_form_entity_group: edfeg.id), remote: true, class: "btn btn-info btn-block d-flex align-items-center justify-content-center" %>
+      </li>
+      <li class="list-group-item border-0 p-0 m-1">
+        <%= link_to "Reenviar todos los accesos únicos", event_data_form_entity_group_entry_pass_email_event_communication_mailers_path(event_data_form_entity_group: edfeg.id, force: true), remote: true, class: "btn btn-info btn-block d-flex align-items-center justify-content-center" %>
+      </li>
+    <% end %>
+  </ul>
+</div>

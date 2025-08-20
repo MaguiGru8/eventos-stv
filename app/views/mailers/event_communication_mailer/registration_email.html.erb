@@ -1,0 +1,28 @@
+<table style="width: 550px; margin: 0 auto; background-color: white; border-radius: 5px; padding: 25px;">
+  <tbody>
+    <tr>
+      <td>
+        <p>Hola <%= @user.name %>!</p>
+        <div style="text-align: center">
+        </div>
+        <div>
+          <h1><%= @event.name %></h1>
+          <%= render 'mailers/event_communication_mailer/event_details_options' %>
+          <hr>
+          <div>
+            <p style="text-align: center; font-size: 16px;">
+              <a href="<%=  fill_form_response_url(kommunity: @event.kommunity, data_form_entity_id: @dfe.id).html_safe %>">
+                Haga clic aquí para completar el formulario de <%= @edfeg.name %> : <%= @edfeg.registration_type.name %> </p>
+            </a>
+          </div>
+          <% if !@message.blank? %>
+            <h3 style="text-align: center;">Los organizadores han incluido un mensaje</h3>
+            <blockquote style="border: 1px dashed lightgrey; border-radius: 5px; padding: 5px;">
+              <%= @message.html_safe %>
+            </blockquote>
+          <% end %>
+        </div>
+      </td>
+    </tr>
+  </tbody>
+</table>

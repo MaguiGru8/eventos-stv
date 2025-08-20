@@ -1,0 +1,60 @@
+<% content_for :page_title do %>
+  Admin - Manejo de usuarios
+<% end %>
+
+<div class="container mt-5 pt-5">
+  <div class="row">
+    <div class="col-12">
+      <h1>Gestión de usuarios</h1>
+      <div class="d-flex justify-content-between align-items-center mb-3">
+        <p>Gestión de usuarios, organizadores y administradores</p>
+        <%= link_to 'Crear nuevo usuario', new_admin_user_path, class: 'btn btn-primary' %>
+      </div>
+      
+      <div class="table-responsive">
+        <table class="table table-striped">
+          <thead>
+            <tr>
+              <th>Nombre</th>
+              <th>Correo</th>
+              <th>Roles</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody>
+            <% @users.each do |user| %>
+              <tr>
+                <td>
+                  <% if user.default_image %>
+                    <%= image_tag url_for(user.avatar), width: 30, class: 'mr-2 rounded-circle' %>
+                  <% else %>
+                    <i class="fas fa-user-circle mr-2"></i>
+                  <% end %>
+                  <%= user.name %>
+                </td>
+                <td><%= user.email %></td>
+                <td>
+                  <% user.user_roles.each do |role| %>
+                    <span class="badge badge-<%= role.name == 'system_administrator' ? 'danger' : (role.name == 'organizer' ? 'success' : 'info') %>">
+                      <%= role.name.humanize %>
+                      <% if role.name == 'organizer' %>
+                        <% kommunity = user.user_roles_users.find_by(user_role_id: role.id)&.kommunity %>
+                        <% if kommunity %>
+                          (<%= kommunity.name %>)
+                        <% end %>
+                      <% end %>
+                    </span>
+                  <% end %>
+                </td>
+                <td>
+                  <%= link_to 'Editar', edit_admin_user_path(user), class: 'btn btn-sm btn-outline-primary' %>
+                  <%= link_to 'Eliminar', admin_user_path(user), method: :delete, data: { confirm: 'Are you sure you want to delete this user?' }, class: 'btn btn-sm btn-outline-danger' %>
+                </td>
+              </tr>
+            <% end %>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>

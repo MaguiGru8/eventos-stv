@@ -1,0 +1,24 @@
+<% content_for :page_title do %>
+  <%= @kommunity.name %> | Events
+<% end %>
+<h4 class="bg-info text-center text-white p-2"><%= @kommunity.name %></h4>
+<% if allowed_view?(:events, :create) %>
+  <div class="card mt-3 p-3 d-flex">
+    <%=  link_to new_event_path do %>
+      <span><i class="fas fa-plus-circle fa-1x text-success"></i> Crear evento</span>
+    <% end %>
+  </div>
+<% end %>
+<div>
+  <div class="row justify-content-center">
+    <div class="col-md-9 ">
+      <div class="row d-flex flex-md-row flex-sm-column flex-wrap justify-content-center">
+        <% @events.each do |event| %>
+          <div class="col-md-4 m-2 p-0">
+            <%= render 'events/event_mini_card', event: event %>
+          </div>
+        <% end %>
+      </div>
+    </div>
+  </div>
+</div>

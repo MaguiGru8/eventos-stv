@@ -1,0 +1,36 @@
+<div class="event-location-track-slots-widget" id="event-tracks-creator-<%= event.id %>">
+  <div class=" p-3">
+    <h3>Agenda <% if event.event_location_tracks.empty? %><small></small><% end %></h3>
+    <div class="event-location-tracks-grid">
+      <% if !event.event_location_tracks.empty? || (user_signed_in? && current_user.role?(:organizer, event.kommunity_id)) %>
+        <div class="row">
+          <div class="col-md-2">
+            <p class="mb-0">
+              <small class="text-muted">Locación</small>
+            </p>
+            <div class="nav bg-white p-3  flex-md-column flex-sm-row flex-sm-nowrap justify-content-md-center nav-pills" id="v-pills-event-locations-tab" role="tablist" aria-orientation="vertical">
+              <% event.event_locations.each_with_index do |elc, index| %>
+                <a class="nav-link <%= index == 0 ? 'active' : '' %>" id="v-pills-elc-<%= elc.id %>-tab" data-toggle="pill" href="#v-pills-elc-<%= elc.id %>" role="tab" aria-controls="v-pills-elc-<%= elc.id %>" aria-selected="<%= index == 0 ? true : false %>">
+                  <%= elc.location.name %>
+                </a>
+              <% end %>
+              <% if allowed_view?(:locations, :create) %>
+                <a class="nav-link btn text-left" id="add-location-button"  data-toggle="modal" data-target="
+            #new-event-location-modal">
+                  <i class="fas fa-plus-circle fa-1x text-success"></i> Añadir locación
+                </a>
+              <% end %>
+            </div>
+          </div>
+          <div class="col-md-10 p-0">
+            <div class="tab-content" id="v-pills-tabContent">
+              <% event.event_locations.each_with_index do |elc, index| %>
+                <%= render 'events/event_location_track', index: index, elc: elc, event: event %>
+              <% end %>
+            </div>
+          </div>
+        </div>
+      <% end %>
+    </div>
+  </div>
+</div>

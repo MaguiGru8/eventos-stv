@@ -1,0 +1,62 @@
+<% if @event_details_options["timings"] %>
+  <div>
+    <div>
+      <p style="background-color: grey; padding: 5px; color: white;">
+        <strong>
+          Cronograma:
+        </strong>
+        <span>
+          <% if @event.start_time.to_date != @event.end_time.to_date %>
+            <span>
+              <div class="badge badge-light mt-3">
+                <%= render 'events/event_time_display', event: @event %>
+              </div>
+            <% end %>
+          </span>
+        </p>
+      </div>
+    </div>
+  <% end %>
+  <% if @event_details_options["event_description"] %>
+    <div style="padding: 5px;"><%= @event.description.html_safe %></div>
+  <% end %>
+  <% if @event_details_options["location"] && !@selected_location.blank? %>
+    <div style="border-bottom: 1px dotted grey; border-top: 1px dotted grey; padding: 5px 0;">
+      <p><strong>Detalles del lugar: </strong></p>
+      <div>
+        <p style="margin: 3px;">
+          <strong>Dirección </strong><%= @selected_location.event_location.location.name %>, <%= @selected_location.event_location.location.address %>
+        </p>
+        <p style="margin: 3px;">
+          <a href="<%= @selected_location.event_location.location.map_link %>">Enlace de la ubicación</a>
+        </p>
+      </div>
+    </div>
+  <% end %>
+  <% if @event_details_options["sessions_list"] && !@selected_location.blank? %>
+    <div>
+      <p>
+        <strong>¡Aquí está la lista de las increíbles charlas/ponencias!</strong>
+      </p>
+      <!--<% @event.event_locations.each do |elc| %>-->
+      <!--<p style=""><strong>elc.location.name</strong></p>-->
+      <!--<% end %>-->
+      <% @selected_location.event_location.event_location_tracks.each do |elt| %>
+        <p style="margin-bottom: 2px;"><strong><%= elt.name %></strong></p>
+        <table style="width: 100%; background-color: #90b0ee3d;">
+          <tbody>
+            <% elt.track_slots.order('start_time asc').each do |ts| %>
+              <tr>
+                <td style="width: 50%; border-bottom: 1px dashed white;">
+                  <small><%= ts.start_time.strftime('%H:%M') %> to <%= ts.end_time.strftime('%H:%M') %></small>
+                </td>
+                <td style="width: 50%; border-bottom: 1px dashed white;">
+                  <small><%= ts.session_title %></small>
+                </td>
+              </tr>
+            <% end %>
+          </tbody>
+        </table>
+      <% end %>
+    </div>
+  <% end %>

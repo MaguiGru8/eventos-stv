@@ -1,0 +1,34 @@
+<fieldset>
+  <div class="form-group card p-3">
+    <div class="row">
+      <div class="form-group col-6">
+        <strong><%= f.label :question,  "Pregunta" %></strong>
+        <%= f.text_field :title, class: 'form-control' %>
+      </div>
+      <div class="form-group col-3">
+        <%= f.label :question_type,  "Tipo de pregunta"%>
+        <%= f.select :question_type_id, options_for_select(QuestionType.all.collect{|m| [translate_to_es(m.name), m.id]}, f.object.question_type_id), {}, class: 'form-control' %>
+      </div>
+      <div class="form-group col-1">
+        <%= f.label :required,  "Requerido" %>
+        <%= f.check_box :required, class: 'form-control' %>
+      </div>
+    </div>
+    <div class="row">
+      <div class="form-group col-10">
+        <%= f.label :description %>
+        <%= f.text_area :description, :class => "form-control", :rows => 1, :cols => 40 %>
+      </div>
+    </div>
+    <div class="d-flex flex-row flex-wrap col-5 p-0">
+      <%= f.fields_for :question_choices do |choice_builder| %>
+        <%= render "question_choice_fields", f: choice_builder %>
+      <% end %>
+    </div>
+    <div class="d-flex flex-row flex-wrap col-5 p-0">
+      <%= link_to_add_fields "Agregar opción", f, :question_choices %>
+      <%= f.hidden_field :_destroy %>
+      <%= link_to "Eliminar pregunta", '#', class: "remove_fields btn btn-danger mx-1" %>
+    </div>
+  </div>
+</fieldset>

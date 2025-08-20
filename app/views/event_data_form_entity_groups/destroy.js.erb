@@ -1,0 +1,12 @@
+{
+function removeFormSet(){
+$('#event-data-form-entity-group-<%= @edfeg.id %>').remove();
+let notification = new Noty({
+text: 'Formulario del evento ELIMINADO',
+theme: 'relax',
+type: 'warning',
+timeout: 1500
+}).show();
+}
+removeFormSet();
+}

@@ -1,0 +1,35 @@
+<div id="event-data-form-entity-response-group-rsvp-email">
+  <h3><%= @edfeg.name %></h3>
+  <h4>Evento: <%= @event.name %></h4>
+  <% if @force %>
+    <p>Se enviarán correos de confirmación a todos los registros preseleccionados.</p>
+  <% else %>
+    <p>Se enviarán correos electrónicos de confirmación a los registros restantes preseleccionados.</p>
+  <% end %>
+  <div class="email-format-container">
+    <%= form_with url: send_event_data_form_entity_group_rsvp_email_event_communication_mailers_path(event_data_form_entity_group: @edfeg, force: @force), method: :post, remote: true do |f| %>
+      <div class="text-center">
+        <small class="alert alert-info" role="alert">
+          ¡Agregaremos los detalles del evento automáticamente al correo electrónico!
+        </small>
+      </div>
+      <fieldset class="mt-3">
+        <div class="field email-subject form-group">
+          <%= f.label :subject, 'Asunto' %>
+          <%= f.text_field :subject, value: "#{@event.kommunity.name} :: #{@event.name} :: RSVP", required: true, class: 'form-control'%>
+          <%= f.hidden_field :force, value: @force %>
+        </div>
+        <div class="field form-group">
+          <%= render 'event_details_options', f: f %>
+        </div>
+        <div class="field">
+          <%= f.label :message, "Añadir algún mensaje (opcional)" %>
+          <%= f.text_area :message, :class => "tinymce editor", :rows => 3, :cols => 50 %>
+        </div>
+        <div class="form-group d-flex justify-content-center">
+          <%= f.submit "Enviar correo electrónico de confirmación", class: "btn-outline-primary" %>
+        </div>
+      </fieldset>
+    <% end %>
+  </div>
+</div>

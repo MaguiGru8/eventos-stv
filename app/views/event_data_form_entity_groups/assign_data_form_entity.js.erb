@@ -1,0 +1,14 @@
+{
+function addAssignedForm(){
+let newAssignedFormListItem = $('#event-data-form-entities-<%= @edfeg.id %>');
+newAssignedFormListItem.append("<%= escape_javascript render 'assigned_form_list_item', dfe: @dfe, event: @event %>");
+newAssignedFormListItem.siblings('.add-form-container').addClass('d-none');
+let notification = new Noty({
+text: 'Nuevo formulario asignado',
+theme: 'relax',
+type: 'success',
+timeout: 1500
+}).show();
+}
+addAssignedForm();
+}
